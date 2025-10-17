@@ -34,13 +34,12 @@ revanced_dl(){
 	# Patch Messenger:
 	# Arm64-v8a
 	get_patches_key "messenger"
-	lock_version="1"
-	get_apk "com.facebook.orca" "messenger-arm64-v8a" "messenger" "facebook-2/messenger/facebook-messenger" "arm64-v8a" "nodpi"
+	get_apkpure "com.facebook.orca" "messenger-arm64-v8a" "facebook-messenger/com.facebook.orca"
 	patch "messenger-arm64-v8a" "revanced"
 	# Patch Facebook:
 	# Arm64-v8a
 	get_patches_key "facebook"
-	get_apk "com.facebook.katana" "facebook-arm64-v8a" "facebook" "facebook-2/facebook/facebook" "arm64-v8a" "nodpi" "Android 11+"
+ 	get_apkpure "com.facebook.katana" "facebook-arm64-v8a" "facebook/com.facebook.katana"
 	patch "facebook-arm64-v8a" "revanced"
 }
 3() {
@@ -48,22 +47,21 @@ revanced_dl(){
 	# Patch Google photos:
 	# Arm64-v8a
 	get_patches_key "gg-photos"
- 	version="7.29.0.757514586" #crash in some devices version above 7.30
 	get_apk "com.google.android.apps.photos" "gg-photos-arm64-v8a" "photos" "google-inc/photos/google-photos" "arm64-v8a" "nodpi"
 	patch "gg-photos-arm64-v8a" "revanced"
 	# Armeabi-v7a
 	get_patches_key "gg-photos"
- 	version="7.29.0.757514586" #crash in some devices version above 7.30
+ 	version="7.32.0.765953717"
 	get_apk "com.google.android.apps.photos" "gg-photos-armeabi-v7a" "photos" "google-inc/photos/google-photos" "armeabi-v7a" "nodpi"
 	patch "gg-photos-armeabi-v7a" "revanced"
 	# x86
 	get_patches_key "gg-photos"
- 	version="7.29.0.757514586" #crash in some devices version above 7.30
+ 	version="7.32.0.765953717"
 	get_apk "com.google.android.apps.photos" "gg-photos-x86" "photos" "google-inc/photos/google-photos" "x86" "nodpi"
 	patch "gg-photos-x86" "revanced"
 	# x86_64
 	get_patches_key "gg-photos"
- 	version="7.29.0.757514586" #crash in some devices version above 7.30
+ 	version="7.32.0.765953717"
 	get_apk "com.google.android.apps.photos" "gg-photos-x86_64" "photos" "google-inc/photos/google-photos" "x86_64" "nodpi"
 	patch "gg-photos-x86_64" "revanced"
 }
@@ -78,33 +76,30 @@ revanced_dl(){
 	# Patch Instagram:
 	# Arm64-v8a
 	get_patches_key "instagram"
-	get_apk "com.instagram.android" "instagram-arm64-v8a" "instagram-instagram" "instagram/instagram-instagram/instagram" "arm64-v8a" "nodpi"
+ 	get_apkpure "com.instagram.android" "instagram-arm64-v8a" "instagram-android/com.instagram.android" "Bundle"
 	patch "instagram-arm64-v8a" "revanced"
 }
 5() {
 	revanced_dl
 	# Patch Pixiv:
 	get_patches_key "pixiv"
-	version="6.134.1" #https://github.com/ReVanced/revanced-patches/issues/4477
-	get_apk "jp.pxv.android" "pixiv" "pixiv" "pixiv-inc/pixiv/pixiv"
+	get_apkpure "jp.pxv.android" "pixiv" "pixiv/jp.pxv.android"
 	patch "pixiv" "revanced"
 	# Patch Twitch:
 	get_patches_key "twitch"
-	#get_apk "tv.twitch.android.app" "twitch" "twitch" "twitch-interactive-inc/twitch/twitch" "Bundle_extract"
-	#split_editor "twitch" "twitch"
-	version="19.1.0" #https://github.com/orgs/ReVanced/discussions/1135#discussioncomment-11797007
- 	get_apk "tv.twitch.android.app" "twitch" "twitch" "twitch-interactive-inc/twitch/twitch"
+	get_apk "tv.twitch.android.app" "twitch" "twitch" "twitch-interactive-inc/twitch/twitch-live-streaming" "Bundle_extract"
+	split_editor "twitch" "twitch"
 	patch "twitch" "revanced"
 	# Patch Twitch Arm64-v8a:
-	#get_patches_key "twitch"
-	#split_editor "twitch" "twitch-arm64-v8a" "exclude" "split_config.armeabi_v7a split_config.x86 split_config.x86_64"
-	#patch "twitch-arm64-v8a" "revanced"
+	get_patches_key "twitch"
+	split_editor "twitch" "twitch-arm64-v8a" "exclude" "split_config.armeabi_v7a split_config.x86 split_config.x86_64"
+	patch "twitch-arm64-v8a" "revanced"
 }
 6() {
 	revanced_dl
 	# Patch Tumblr:
 	get_patches_key "tumblr"
-	get_apk "com.tumblr" "tumblr" "tumblr" "tumblr-inc/tumblr/tumblr-fandom-art-chaos" "Bundle_extract"
+	get_apk "com.tumblr" "tumblr" "tumblr" "tumblr-inc/tumblr/tumblr-social-media-fandom" "Bundle_extract"
 	split_editor "tumblr" "tumblr"
 	patch "tumblr" "revanced"
 	# Patch Tumblr Arm64-v8a:
@@ -128,10 +123,11 @@ revanced_dl(){
 	get_apk "com.rarlab.rar" "rar" "rar" "rarlab-published-by-win-rar-gmbh/rar/rar" "Bundle"
 	patch "rar" "revanced"
 	# Patch Lightroom:
-	#get_patches_key "lightroom"
-  	#version="10.0.2"
-	#get_apk "com.adobe.lrmobile" "lightroom" "lightroom" "adobe/lightroom/lightroom"
-	#patch "lightroom" "revanced"
+	get_patches_key "lightroom"
+ 	url="https://adobe-lightroom-mobile.en.uptodown.com/android/download/1033600808" #Use uptodown because apkmirror always ask pass Cloudflare on this app
+	url="https://dw.uptodown.com/dwn/$(req "$url" - | $pup -p --charset utf-8 'button#detail-download-button attr{data-url}')"
+	req "$url" "lightroom.apk"
+	patch "lightroom" "revanced"
 }
 8() {
 	revanced_dl
@@ -193,11 +189,36 @@ revanced_dl(){
 12() {
 	revanced_dl
 	# Patch Spotjfy Arm64-v8a
-	get_patches_key "Spotjfy-revanced"
 	j="i"
-	version="9.0.44.478" #https://github.com/ReVanced/revanced-patches/issues/4958#issuecomment-2883387940
+	get_patches_key "Spotjfy-revanced"
 	get_apkpure "com.spot"$j"fy.music" "spotjfy-arm64-v8a" "spot"$j"fy-music-and-podcasts-for-android/com.spot"$j"fy.music"
 	patch "spotjfy-arm64-v8a" "revanced"
+	# Patch Proton mail
+	get_patches_key "protonmail-revanced"
+	get_apk "ch.protonmail.android" "protonmail" "protonmail-encrypted-email" "proton-technologies-ag/protonmail-encrypted-email/proton-mail-encrypted-email"
+	patch "protonmail" "revanced"
+}
+13() {
+	revanced_dl
+	# Patch Threads
+	get_patches_key "Threads-revanced"
+	get_apkpure "com.instagram.barcelona" "threads-arm64-v8a" "threads/com.instagram.barcelona" "Bundle"
+	patch "threads-arm64-v8a" "revanced"
+	# Patch Prime Video
+	get_patches_key "Prime-Video-revanced"
+	version="3.0.412"
+	get_apk " com.amazon.avod.thirdpartyclient" "prime-video-arm64-v8a" "amazon-prime-video" "amazon-mobile-llc/amazon-prime-video/amazon-prime-video" "arm64-v8a"
+	patch "prime-video-arm64-v8a" "revanced"
+}
+14() {
+	revanced_dl
+	# Patch Crunchyroll
+	get_patches_key "Crunchyroll-revanced"
+	url="https://crunchyroll.en.uptodown.com/android/download/1109023537-x" #Use uptodown because apkmirror always ask pass Cloudflare on this app
+	url="https://dw.uptodown.com/dwn/$(req "$url" - | $pup -p --charset utf-8 'button#detail-download-button attr{data-url}')"
+	req "$url" "crunchyroll"
+	split_editor "crunchyroll" "crunchyroll"
+	patch "crunchyroll" "revanced"
 }
 case "$1" in
     1)
@@ -235,5 +256,11 @@ case "$1" in
         ;;
     12)
         12
+        ;;
+    13)
+        13
+        ;;
+    14)
+        14
         ;;
 esac
