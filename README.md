@@ -164,18 +164,6 @@ Download
 | [x86](../../releases/download/all/youtube-x86-revanced-extended.apk)                 | [x86](../../releases/download/all/youtube-beta-x86-revanced-extended.apk)                 |
 | [x86_64](../../releases/download/all/youtube-x86_64-revanced-extended.apk)           | [x86_64](../../releases/download/all/youtube-beta-x86_64-revanced-extended.apk)           |
 
-<details>
-  <summary>Lite version</summary>
-
-**A lite version is a version with unnecessary things removed. For example, it might only have an English interface and remove unused screen DPI from split APKs**
-
-| [Stable version](https://github.com/inotia00/revanced-patches/releases/latest)               | [Beta version](https://github.com/inotia00/revanced-patches/releases)                          |
-| -------------------------------------------------------------------------------------------  | ---------------------------------------------------------------------------------------------- |
-| [Arm64-v8a](../../releases/download/all/youtube-lite-arm64-v8a-revanced-extended.apk)        | [Arm64-v8a](../../releases/download/all/youtube-lite-beta-arm64-v8a-revanced-extended.apk)     |
-| [Armeabi-v7a](../../releases/download/all/youtube-lite-armeabi-v7a-revanced-extended.apk)    | [Armeabi-v7a](../../releases/download/all/youtube-lite-beta-armeabi-v7a-revanced-extended.apk) |
-
-</details>
-
 ### [Revanced Extended forked by anddea:](https://github.com/anddea/revanced-patches)
 
 | [Stable version](https://github.com/anddea/revanced-patches/releases/latest)     | [Beta version](https://github.com/anddea/revanced-patches/releases)            |
@@ -376,6 +364,12 @@ Download
 ---
 
 ### [Reddit:](https://play.google.com/store/apps/details?id=com.reddit.frontpage)
+
+### [Morphe:](https://github.com/MorpheApp/morphe-patches)
+
+| Stable version                                                       | Beta version                                                              |
+| -------------------------------------------------------------------- | ------------------------------------------------------------------------- | 
+| [All Architectures](../../releases/download/all/reddit-morphe.apk)   | [All Architectures](../../releases/download/all/reddit-beta-morphe.apk)   |
 
 ### [Revanced:](https://github.com/ReVanced/revanced-patches)
 
@@ -607,17 +601,11 @@ Download
 Apps below not based on Revanced, but project still open-source.
 </h4>
 
-[![Instagram](https://img.shields.io/badge/Instagram-%23E4405F.svg?style=for-the-badge&logo=Instagram&logoColor=white)](https://play.google.com/store/apps/details?id=com.instagram.android)
+### [Spotjfy:](https://www.google.com/search?q=Spotjfy)
 
-### [Instafel:](https://github.com/mamiiblt/instafel)
+### [ReVancedXposed](https://github.com/chsbuffer/ReVancedXposed)
 
-👉 [Offical author download link](https://github.com/mamiiblt/instafel/releases/latest)
-
-[Arm64-v8a](../../releases/download/all/instagram-instafel.apk )
-
-[Cloned-Arm64-v8a](../../releases/download/all/instagram-clone-instafel.apk )
-
-Cloned version has a different package name than the original app, so you can install both the original and the modified app at the same time.
+[All Architectures](../../releases/download/all/spotjfy-ReVancedXposed.apk )
 
 ### ⚠️ Library, resources using in this repository:
 
@@ -725,9 +713,18 @@ Cloned version has a different package name than the original app, so you can in
 </details>
 
 <details>
-  <summary>mamiiblt</summary>
+  <summary>chsbuffer</summary>
 
-[Patches](https://github.com/mamiiblt/instafel) - [MIT](https://github.com/mamiiblt/instafel/blob/main/LICENSE)
+[Patches](https://github.com/chsbuffer/ReVancedXposed) - [GPL-3.0](https://github.com/chsbuffer/ReVancedXposed/blob/main/LICENSE)
+
+</details>
+
+</details>
+
+<details>
+  <summary>JingMatrix</summary>
+
+[LSPatch](https://github.com/JingMatrix/LSPatch) - [GPL-3.0](https://github.com/JingMatrix/LSPatch/blob/main/LICENSE)
 
 </details>
 

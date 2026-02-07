@@ -31,64 +31,67 @@ red_log() {
 
 # Download Github assets requirement:
 dl_gh() {
-	if [ "$3" == "prerelease" ]; then
-		local repo=$1
-		for repo in $1; do
-			local owner=$2 tag=$3 found=0 assets=0
-			releases=$(wget -qO- "https://api.github.com/repos/$owner/$repo/releases")
-			while read -r line; do
-				if [[ $line == *"\"tag_name\":"* ]]; then
-					tag_name=$(echo $line | cut -d '"' -f 4)
-					if [ "$tag" == "latest" ] || [ "$tag" == "prerelease" ]; then
-						found=1
-					else
-						found=0
-					fi
-				fi
-				if [[ $line == *"\"prerelease\":"* ]]; then
-					prerelease=$(echo $line | cut -d ' ' -f 2 | tr -d ',')
-					if [ "$tag" == "prerelease" ] && [ "$prerelease" == "true" ] ; then
-						found=1
-					elif [ "$tag" == "prerelease" ] && [ "$prerelease" == "false" ]; then
-						found=1
-					fi
-				fi
-				if [[ $line == *"\"assets\":"* ]]; then
-					[ $found -eq 1 ] && assets=1
-				fi
-				if [[ $line == *"\"browser_download_url\":"* ]]; then
-					if [ $assets -eq 1 ]; then
-						url=$(echo $line | cut -d '"' -f 4)
-						if [[ $url != *.asc ]]; then
-							name=$(basename "$url")
-							[[ $tag == prerelease && $name != *dev* ]] && continue
-							wget -q -O "$name" "$url"
-							green_log "[+] Downloading $name from $owner"
-						fi
-					fi
-				fi
-				if [[ $line == *"],"* ]]; then
-					if [ $assets -eq 1 ]; then
-						assets=0
-						break
-					fi
-				fi
-			done <<< "$releases"
-		done
-	else
-		for repo in $1; do
-			tags=$( [ "$3" == "latest" ] && echo "latest" || echo "tags/$3" )
-			wget -qO- "https://api.github.com/repos/$2/$repo/releases/$tags" \
-			| jq -r '.assets[] | "\(.browser_download_url) \(.name)"' \
-			| while read -r url names; do
-				if [[ $url != *.asc ]]; then
-					[[ $3 == latest && $names == *dev* ]] && continue
-					green_log "[+] Downloading $names from $2"
-					wget -q -O "$names" "$url"
-				fi
-			done
-		done
-	fi
+  if [ $3 == "prerelease" ]; then
+    local repo=$1
+    for repo in $1 ; do
+      local owner=$2 tag=$3 found=0 assets=0
+      releases=$(wget -qO- "https://api.github.com/repos/$owner/$repo/releases")
+      while read -r line; do
+        if [[ $line == *"\"tag_name\":"* ]]; then
+          tag_name=$(echo $line | cut -d '"' -f 4)
+          if [ "$tag" == "latest" ] || [ "$tag" == "prerelease" ]; then
+            found=1
+          else
+            found=0
+          fi
+        fi
+        if [[ $line == *"\"prerelease\":"* ]]; then
+          prerelease=$(echo $line | cut -d ' ' -f 2 | tr -d ',')
+          if [ "$tag" == "prerelease" ] && [ "$prerelease" == "true" ] ; then
+            found=1
+          elif [ "$tag" == "prerelease" ] && [ "$prerelease" == "false" ]; then
+            found=1
+          fi
+        fi
+        if [[ $line == *"\"assets\":"* ]]; then
+          if [ $found -eq 1 ]; then
+            assets=1
+          fi
+        fi
+        if [[ $line == *"\"browser_download_url\":"* ]]; then
+          if [ $assets -eq 1 ]; then
+            url=$(echo $line | cut -d '"' -f 4)
+            if [[ $url != *.asc ]]; then
+              name=$(basename "$url")
+              wget -q -O "$name" "$url"
+              green_log "[+] Downloading $name from $owner"
+            fi
+          fi
+        fi
+        if [[ $line == *"],"* ]]; then
+          if [ $assets -eq 1 ]; then
+            assets=0
+            break
+          fi
+        fi
+      done <<< "$releases"
+    done
+  else
+    for repo in $1 ; do
+      tags=$( [ "$3" == "latest" ] && echo "latest" || echo "tags/$3" )
+      wget -qO- "https://api.github.com/repos/$2/$repo/releases/$tags" \
+        | jq -r '.assets[] | "\(.browser_download_url) \(.name)"' \
+        | while read -r url names; do
+          if [[ $url != *.asc ]]; then
+            if [[ "$3" == "latest" && "$names" == *dev* ]]; then
+              continue
+            fi
+            green_log "[+] Downloading $names from $2"
+            wget -q -O "$names" $url
+          fi
+        done
+    done
+  fi
 }
 
 #################################################
@@ -193,11 +196,12 @@ get_apk() {
 
 		  if [ "$num" -ge "$min_major" ]; then
 			version=$(java -jar *cli*.jar list-patches --with-packages --with-versions $patch_glob | awk -v pkg="$1" '
-			  BEGIN { found = 0 }
-			  /^Index:/ { found = 0 }
-			  /Package name: / { if ($3 == pkg) { found = 1 } }
-			  /Compatible versions:/ { if (found) { getline; latest_version = $1; while (getline && $1 ~ /^[0-9]+\./) { latest_version = $1 } print latest_version; exit } }
-			')
+			  BEGIN { found = 0; printing = 0 }
+			  /^Index:/ { if (printing) exit; found = 0 }
+			  /Package name: / { if ($3 == pkg) found = 1 }
+			  /Compatible versions:/ { if (found) printing = 1; next }
+			  printing && $1 ~ /^[0-9]+\./ { print $1 }
+			' | sort -V | tail -n1)
 		  else
 			version=$(jq -r '[.. | objects | select(.name == "'"$1"'" and .versions != null) | .versions[]] | reverse | .[0] // ""' *.json 2>/dev/null | uniq)
 		  fi
@@ -290,11 +294,12 @@ get_apkpure() {
 
 		  if [ "$num" -ge "$min_major" ]; then
 			version=$(java -jar *cli*.jar list-patches --with-packages --with-versions $patch_glob | awk -v pkg="$1" '
-			  BEGIN { found = 0 }
-			  /^Index:/ { found = 0 }
-			  /Package name: / { if ($3 == pkg) { found = 1 } }
-			  /Compatible versions:/ { if (found) { getline; latest_version = $1; while (getline && $1 ~ /^[0-9]+\./) { latest_version = $1 } print latest_version; exit } }
-			')
+			  BEGIN { found = 0; printing = 0 }
+			  /^Index:/ { if (printing) exit; found = 0 }
+			  /Package name: / { if ($3 == pkg) found = 1 }
+			  /Compatible versions:/ { if (found) printing = 1; next }
+			  printing && $1 ~ /^[0-9]+\./ { print $1 }
+			' | sort -V | tail -n1)
 		  else
 			version=$(jq -r '[.. | objects | select(.name == "'"$1"'" and .versions != null) | .versions[]] | reverse | .[0] // ""' *.json 2>/dev/null | uniq)
 		  fi
